@@ -27,7 +27,7 @@ Après avoir étudié le jeu de données dans son ensemble, étudiez plus en pr�
 
 - Rapportez le fruit de vos recherches dans un document structuré.
 
-Pour filter les données, vous devez employer les instructions suivantes
+Pour filtrer les données, vous devez employer les instructions suivantes
  
 ```
 # Réduction du jeu de données zooplankton
