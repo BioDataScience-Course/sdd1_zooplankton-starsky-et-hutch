@@ -1,0 +1,111 @@
+---
+title: "Zooplankton"
+output:
+  html_document:
+    highlight: pygments
+    theme: cosmo
+---
+
+```{r setup, echo = FALSE,include= FALSE}
+SciViews::R
+```
+#Introduction
+Anamyse d'une étude sur un ensemble de zooplancton récupérés à Tulear et Madacascar, pendant différentes saisons, différentes profondeurs pour tenir compte de la variabilité. Attention les classes rares sont surreprésentés.
+
+#Graphique
+```{r import}
+zooplankton <- read( file = "zooplankton", package = "data.io", lang = "fr")
+```
+##Graphique de l'aire en fonction du diamètre circulaire équivalent.
+```{r g1}
+chart(zooplankton, area~ecd | class) +
+  geom_point(na.rm = TRUE) +
+  scale_fill_viridis_d()
+```
+
+##Histogramme de la taille. 
+```{r g2}
+chart(zooplankton, formula = ~ size | class) +
+  geom_histogram(data = zooplankton[ , -c(20)], fill= "light blue") +
+  geom_histogram(bins= 30) +
+  geom_histogram(show.legend = FALSE)
+```
+
+```{r g5_6}
+chart(zooplankton, formula = ~ size | class) +
+  geom_density()
+chart(zooplankton, ~size %color=% class) +
+  geom_density()
+```
+
+##Graphique de l'aire pour chaque classe de zooplancton.
+```{r ,echo= FALSE}
+library(ggridges)
+```
+```{r g3}
+chart(zooplankton, class ~ area ) +
+  geom_density_ridges(na.rm = TRUE)
+```
+```{r g9}
+chart(zooplankton, area~class) +
+  geom_violin(na.rm = TRUE) +
+  coord_flip()
+```
+
+##Graphique de la transparence en fonction de la compacité.
+```{r g4}
+chart(zooplankton, transparency~compactness |class) +
+  geom_point(na.rm = TRUE)
+```
+
+##Graphique de la taille pour chaque classe.
+```{r g7}
+chart(zooplankton, formula = size ~ class) +
+  geom_violin() +
+  coord_flip()
+```
+
+##Graphique de l'aire en fonction de l'axe majeur de l'éllipsoïde.
+```{r g8}
+chart(zooplankton, area~major %color=% class) +
+  geom_point(na.rm = TRUE)
+```
+
+
+##Graphique de l'étendue des D.O. en fonction de la taille .
+```{r g10}
+chart(zooplankton, range~size |class) +
+  geom_point(na.rm = TRUE)
+```
+
+##Graphique des D.O. minimales en fonction des D.O. maximums
+```{r g11}
+chart(zooplankton, min~max |class) +
+  geom_point(na.rm =TRUE)
+```
+
+##Graphique de la densité en fonction des D.O. minimale
+```{r g12}
+chart(zooplankton, ~min) +
+  geom_density(na.rm = TRUE)
+```
+ 
+##Histograme de l'écartype des D.O.
+```{r g13}
+chart(zooplankton,~std_dev |class) +
+  geom_histogram(data = zooplankton[ , -c(20)], fill = "light blue") +
+  geom_histogram(show.legend = FALSE)
+```
+
+##Graphique de la circularité en fonction du périmètre.
+```{r g14}
+chart(zooplankton, circularity~perimeter |class) +
+  geom_point()
+```
+
+##Histograme des aspects.
+```{r g15}
+chart(zooplankton,~aspect |class) +
+  geom_histogram(data = zooplankton[,-c(20)], fill = "light blue") +
+  geom_histogram(show.legend = FALSE)
+```
