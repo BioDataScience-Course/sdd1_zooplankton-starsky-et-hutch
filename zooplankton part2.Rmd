@@ -1,0 +1,58 @@
+---
+title: "zooplancton part 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+SciViews:: R
+```
+```{r}
+zooplankton_sub <- filter(zooplankton, class %in% c("Poecilostomatoid", "Calanoid", "Cyclopoid", "Harpacticoid"))
+```
+
+##ecd en fonction de l'aire
+```{r}
+chart(zooplankton, formula = ecd ~ area %col=% perimeter) +
+  geom_point()
+```
+
+```{r}
+library(ggridges)
+```
+
+##périmètre selon les classes
+```{r}
+chart(zooplankton, class ~ perimeter) +
+  geom_density_ridges()
+```
+
+##axe mineur de l'ellipsoïde en fonction de la classe
+```{r}
+chart(zooplankton, formula = min ~ class) + 
+  geom_violin() + 
+  coord_flip()
+```
+
+##
+```{r}
+chart(zooplankton_sub, ~ elongation %alpha=% class) + 
+  geom_histogram(bins=30) 
+```
+
+##
+```{r}
+chart(zooplankton_sub,formula=~ elongation)+ 
+  geom_density()
+```
+
+
+##
+```{r}
+chart(zooplankton_sub, formula= compactness ~ transparency %alpha=% class ) + 
+  geom_point(na.rm = TRUE)
+```
+
+
