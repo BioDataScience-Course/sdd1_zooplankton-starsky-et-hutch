@@ -13,8 +13,8 @@ SciViews:: R
 zooplankton_sub <- filter(zooplankton, class %in% c("Poecilostomatoid", "Calanoid", "Cyclopoid", "Harpacticoid"))
 ```
 
-##ecd en fonction de l'aire
-```{r}
+##Graphique de l'ecd en fonction de l'aire
+```{r Graphique 1}
 chart(zooplankton_sub, formula = ecd ~ area %col=% perimeter) +
   geom_point(na.rm= TRUE) 
 ```
@@ -25,65 +25,65 @@ library(ggridges)
 ```
 
 
-##périmètre selon les classes
-```{r}
+##Graphique du périmètre selon les classes de copépodes
+```{r Graphique 2}
 chart(zooplankton_sub, class ~ perimeter %fill=% class %alpha=% class) +
   geom_density_ridges() 
 ```
 
 
-##axe mineur de l'ellipsoïde en fonction de la classe
-```{r}
+## Graphique de l'axe mineur de l'ellipsoïde en fonction de la classe de copépode
+```{r Graphique 3}
 chart(zooplankton_sub, formula = min ~ class %fill=% class) + 
   geom_violin() + 
   coord_flip()
 ```
 
 
-##
-```{r}
+##Histogramme de l'élongation en fonction de la classe de copépode
+```{r Graphique 4}
 chart(zooplankton_sub, ~ elongation %alpha=% class) + 
   geom_histogram(bins=30) 
 ```
 
 
-##
-```{r}
-chart(zooplankton_sub,formula=~ elongation %col=% class)+ 
+##Graphique de densité de la compacité en fonction de la classe de copépode
+```{r Graphique 5}
+chart(zooplankton_sub,formula=~ compactness %col=% class)+ 
   geom_density()
 ```
 
 
-##
-```{r}
+##Graphique de la compacité en fonction de la transparence selon la classe de copépode
+```{r Graphique 6}
 chart(zooplankton_sub, formula= compactness ~ transparency %alpha=% class) + 
   geom_point(na.rm = TRUE)
 ```
 
 
-##
-```{r}
-chart(zooplankton_sub, formula = ~ circularity) + 
+##Graphique de densité de la circularité selon la classe de copépode
+```{r Graphique 7}
+chart(zooplankton_sub, formula = ~ circularity | class) + 
   geom_density()
 ```
 
 
-##
-```{r}
-chart(zooplankton_sub, formula = ~ transparency) + 
-  geom_density()
+##Graphique de densité de la transparence selon la classe de copépode
+```{r Graphique 8}
+chart(zooplankton_sub, formula = ~ transparency %fill=% class %col=% class %alpha=% class|class) + 
+  geom_density(show.legend = FALSE)
 ```
 
 
-##
-```{r}
+##Histogramme de la moyenne selon la classe de copépodes  
+```{r Graphique 9}
 chart(zooplankton_sub, formula=~mean %col=% class %alpha=% class) + 
   geom_histogram()
 ```
 
 
-##
-```{r}
+##Graphique de l'élongation en fonction de la circularité selon la classe de copépode
+```{r Graphique 10}
 chart(zooplankton_sub, formula= elongation ~ circularity %col=% class %alpha=% class) + 
   geom_point()
 ```
