@@ -13,6 +13,10 @@ SciViews:: R
 zooplankton_sub <- filter(zooplankton, class %in% c("Poecilostomatoid", "Calanoid", "Cyclopoid", "Harpacticoid"))
 ```
 
+#Introduction
+Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascare, et plus précisément sur les copépodes.
+
+#Résultats
 ##Graphique de l'ecd en fonction de l'aire
 ```{r Graphique 1}
 chart(zooplankton_sub, formula = ecd ~ area %col=% perimeter) +
@@ -56,15 +60,16 @@ chart(zooplankton_sub,formula=~ compactness %col=% class)+
 
 ##Graphique de la compacité en fonction de la transparence selon la classe de copépode
 ```{r Graphique 6}
-chart(zooplankton_sub, formula= compactness ~ transparency %alpha=% class) + 
-  geom_point(na.rm = TRUE)
+chart(zooplankton_sub, formula = ~ class %fill=% class) + 
+  geom_bar(position="dodge") + 
+  coord_flip()
 ```
 
 
 ##Graphique de densité de la circularité selon la classe de copépode
 ```{r Graphique 7}
-chart(zooplankton_sub, formula = ~ circularity | class) + 
-  geom_density()
+chart(zooplankton_sub, formula = area ~ circularity | class) + 
+  geom_boxplot()
 ```
 
 
@@ -77,14 +82,21 @@ chart(zooplankton_sub, formula = ~ transparency %fill=% class %col=% class %alph
 
 ##Histogramme de la moyenne selon la classe de copépodes  
 ```{r Graphique 9}
-chart(zooplankton_sub, formula=~mean %col=% class %alpha=% class) + 
-  geom_histogram()
+chart(zooplankton_sub, formula= max ~ ecd %col=% class %alpha=% class) + 
+  geom_violin() + 
+  coord_flip()
 ```
 
 
 ##Graphique de l'élongation en fonction de la circularité selon la classe de copépode
 ```{r Graphique 10}
-chart(zooplankton_sub, formula= elongation ~ circularity %col=% class %alpha=% class) + 
-  geom_point()
+chart(zooplankton_sub, formula= ~ 0 %fill=% class %alpha=% class) + 
+  geom_bar(width = 1) + 
+  coord_polar("y", start = 0) +
+  theme_void() + 
+  scale_fill_viridis_d()
 ```
+
+
+
 
