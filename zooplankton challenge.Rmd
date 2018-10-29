@@ -1,0 +1,44 @@
+---
+title: "challenge  Glo"
+output: html_document
+---
+
+```{r Setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Chargement SciViews :: R}
+SciViews::R
+(zoo <- read("zooplankton", package = "data.io", lang = "FR"))
+```
+
+```{r Log10 (area)}
+zoo1 <- mutate(zoo, lg(area) )
+```
+
+
+```{r Log10(area) en fonction de la classe}
+zoo2 <- chart(zoo, formula = ~lg(area) | class) +
+  geom_histogram()
+```
+
+```{r}
+zoo3 <- filter(zoo, mode==max)  
+zoo4 <- group_by(zoo3,class)
+  summarise(zoo4, "n" = n())
+```
+```{r}
+
+```
+
+
+```{r}
+zoo %>.%
+group_by(., mode) %>.%
+filter(., mode < 0.5) -> zoo_trans
+
+zoo %>.%
+group_by(., mode) %>.%
+filter(., mode > 0.5) -> zoo_opac
+```
+
