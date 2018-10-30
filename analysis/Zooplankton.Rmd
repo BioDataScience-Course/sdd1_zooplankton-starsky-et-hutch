@@ -4,6 +4,7 @@ output:
   html_document:
     highlight: pygments
     theme: cosmo
+source: Grosjean, Ph & K. Denis (2004). Supervised classification of images, applied to plankton samples using R and ZooImage. Chap.12 of Data Mining Applications with R. Zhao, Y. & Y. Cen (eds). Elevier. Pp 331-365. https://doi.org/10.1016/C2012-0-00333-X.
 ---
 
 ```{r setup, echo = FALSE,include= FALSE}
@@ -29,6 +30,11 @@ chart(zooplankton, formula = ~ size | class) +
   geom_histogram(data = zooplankton[ , -c(20)], fill= "light blue") +
   geom_histogram(bins= 30) +
   geom_histogram(show.legend = FALSE)
+```
+```{r}
+chart(zooplankton,~class) +
+  geom_bar(position = "dodge") +
+  coord_flip()
 ```
 
 ```{r g5_6}
@@ -56,6 +62,14 @@ chart(zooplankton, area~class) +
 ```{r g4}
 chart(zooplankton, transparency~compactness |class) +
   geom_point(na.rm = TRUE)
+```
+```{r}
+library(ggplot2)
+```
+```{r}
+ggplot(zooplankton, aes(compactness=x, transparency=y)) +
+  geom_segment( aes(x=x, xend=x, y=0, yend=y), size=1, color="blue", linetype="dotted") +
+  geom_point()
 ```
 
 ##Graphique de la taille pour chaque classe.
@@ -102,10 +116,29 @@ chart(zooplankton,~std_dev |class) +
 chart(zooplankton, circularity~perimeter |class) +
   geom_point()
 ```
+```{r}
+chart(zooplankton,circularity~perimeter) +
+  geom_bar(position = "dodge") +
+  coord_flip()
+```
 
 ##Histograme des aspects.
 ```{r g15}
 chart(zooplankton,~aspect |class) +
   geom_histogram(data = zooplankton[,-c(20)], fill = "light blue") +
   geom_histogram(show.legend = FALSE)
+```
+```{r}
+chart(zoo_peri, aes(x=mean, y=class))+
+  geom_point() +
+  geom_segment(aes(x=0,
+                   xend=mean,
+                   y=class,
+                   yend=class))
+``` 
+
+```{r nouveau jeu de données}
+zooplankton %>.%
+  group_by(., class) %>.%
+  summarise(.,mean= mean(perimeter)) -> zoo_peri
 ```

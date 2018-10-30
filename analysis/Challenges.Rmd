@@ -1,0 +1,41 @@
+---
+title: "Challenge"
+author: "Lambert Guillaume"
+date: "10/29/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+SciViews::R
+(zoo <- read("zooplankton", package = "data.io", lang = "FR"))
+```
+
+#Calcul du log de l'aire
+```{r}
+zoo2 <- mutate(zoo,
+         log_area = log10(area))
+chart(zoo2, ~log_area |class) +
+  geom_density() +
+  ylab(label = "nombres d'individus") +
+  xlab(label = "log de l'aire")
+```
+
+#Calcul du nombres d'individus ayant le même mode que le max
+```{r}
+zoo3 <- filter(zoo , mode==max)
+zoo3 %>.% 
+  group_by(., class) %>.%
+  summarise(., "nombres d'individus"=n())
+```
+Il y a 46 individus qui ont le même mode que le max. La famille qui constitue la plus grosse partie de ces individus est la famille des Gastéropodes avec 27 individus.
+
+```{r}
+zoo4 <- zoo
+chart(zoo4,~mode) +
+  geom_histogram(bins = 30)
+zoo4_a<-filter(zoo4, mode<0.10)
+zoo4_b <- filter(zoo4, mode>0.10)
+```
+```{r}
+zoo_a <- filter(zoo4_a, class  != ("Cirripède", "Cladocère",  "Décapode", "Malacostracé")
+```
