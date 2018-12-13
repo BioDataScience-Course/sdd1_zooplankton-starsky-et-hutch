@@ -6,22 +6,32 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 ```{r}
 SciViews:: R
 ```
+
 ```{r}
 zooplankton <- read( file = "zooplankton", package = "data.io", lang = "fr")
 zooplankton_sub <- filter(zooplankton, class %in% c("Poecilostomatoid", "Calanoid", "Cyclopoid", "Harpacticoid"))
 ```
 
 #Introduction
-Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascare, et plus précisément sur les copépodes.
+Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascar, et plus précisément sur les copépodes.
 
+#But 
+Déterminer les relations entre les différentes parties corporelles chez les zooplanctons de Tulear et Madagascar. 
+
+#Matériel et méthodes
+Je ne dispose pas des informations concernant l'acquisation des données utilisées dans ce rapport (comment elles ont été collectées, à quel moment, à l'aide de quels instruments)
+
+#Statistiques
+Dans ce rapport je vais utiliser 2 tests d'analyse de variance, ce sont les test de Wilcoxon et de Kruskal-Wallis 
 #Résultats
 ##Graphique de l'ecd en fonction de l'aire
 ```{r Graphique 1}
 chart(zooplankton_sub, formula = ecd ~ area %col=% perimeter) +
-  geom_point(na.rm= TRUE) 
+  geom_point(na.rm = TRUE) 
 ```
 
 
@@ -97,3 +107,16 @@ chart(zooplankton_sub, formula= ~ 0 %fill=% class %alpha=% class) +
   theme_void() + 
   scale_fill_viridis_d()
 ```
+
+
+
+```{r Test Wilcoxon}
+
+```
+
+
+
+```{r Kruskal-Wallis}
+
+```
+
