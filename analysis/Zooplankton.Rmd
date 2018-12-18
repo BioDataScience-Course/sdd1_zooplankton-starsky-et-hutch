@@ -11,45 +11,75 @@ source: Grosjean, Ph & K. Denis (2004). Supervised classification of images, app
 SciViews::R
 ```
 #Introduction
-Anamyse d'une étude sur un ensemble de zooplancton récupérés à Tulear et Madacascar, pendant différentes saisons, différentes profondeurs pour tenir compte de la variabilité. Attention les classes rares sont surreprésentés.
+Nous avons récolté des échantillons de zooplanctons en différents point géographiques, en différentes saisons, en différentes profondeurs pour pouvoir représenter la variabilité. Attention les classes rares sont ici surreprésentées.
+
+#But
+Le but de cette expérience est de paramétrer un classeur automatique pour le zooplancton. Pour cela, on 
+
+
 
 #Graphique
 ```{r import}
 zooplankton <- read( file = "zooplankton", package = "data.io", lang = "fr")
 ```
+
+```{r}
+zooplankton %>.%
+  group_by(., class) %>.%
+  summarise(., "ecd"=mean(ecd),
+            "area"= mean(area),
+            "perimeter"= mean(perimeter),
+            "feret"=mean(feret),
+            "major"=mean(major),
+            "minor"=mean(minor),
+            "mean"=mean(mean),
+            "mode"=mean(mode),
+            "min"=mean(min),
+            "max"=mean(max),
+            "std_dev"=mean(std_dev),
+            "range"=mean(range),
+            "size"=mean(size),
+            "aspect"=mean(aspect),
+            "elongation"=mean(elongation),
+            "compactness"=mean(compactness),
+            "transparency"=mean(transparency),
+            "circularity"=mean(circularity),
+            "density"=mean(density)) -> zoo
+```
 ##Graphique de l'aire en fonction du diamètre circulaire équivalent.
 ```{r g1}
-chart(zooplankton, area~ecd | class) +
+chart(zoo, area~ecd %col=% class) +
   geom_point(na.rm = TRUE) +
   scale_fill_viridis_d()
 ```
 
 ##Histogramme de la taille. 
 ```{r g2}
-chart(zooplankton, formula = ~ size | class) +
-  geom_histogram(data = zooplankton[ , -c(20)], fill= "light blue") +
+chart(zoo, formula = ~ size %fill=% class) +
   geom_histogram(bins= 30) +
   geom_histogram(show.legend = FALSE)
 ```
 ```{r}
-chart(zooplankton,~class) +
-  geom_bar(position = "dodge") +
+chart(zoo,size~class) +
+  geom_col(position = "dodge") +
   coord_flip()
 ```
 
 ```{r g5_6}
-chart(zooplankton, formula = ~ size | class) +
+chart(zoo, formula = ~ size %col=% class) +
   geom_density()
-chart(zooplankton, ~size %color=% class) +
+chart(zoo, ~size %color=% class) +
   geom_density()
 ```
 
 ##Graphique de l'aire pour chaque classe de zooplancton.
+
 ```{r ,echo= FALSE}
 library(ggridges)
 ```
+
 ```{r g3}
-chart(zooplankton, class ~ area ) +
+chart(zoo, class ~ area ) +
   geom_density_ridges(na.rm = TRUE)
 ```
 ```{r g9}
