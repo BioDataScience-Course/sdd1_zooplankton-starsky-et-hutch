@@ -49,51 +49,35 @@ zooplankton %>.%
 ##Graphique de l'aire en fonction du diamètre circulaire équivalent.
 ```{r g1}
 chart(zooplankton, area~size | class) +
-  geom_point(alpha = 0.5) +
-  scale_fill_viridis_d()+
-  coord_flip()
+  geom_point(alpha = 0.5)
 ```
 
+Nous voyons ici que la taile en fonction de l'aire est très variable en fonction de l'espèce.
 ##Histogramme de la taille. 
-```{r g2}
-chart(zooplankton, formula = ~ size %fill=% class) +
-  geom_histogram(bins = ) +
-  geom_histogram(show.legend = FALSE)
-```
+
+
+
 ```{r}
 chart(zoo,size~class) +
   geom_col(position = "dodge") +
   coord_flip()
 ```
 
+Nous constatons ici que la taille varie énormement en fonction de l'espèce.
 
-```{r g5_6}
-```
 
-##Graphique de l'aire pour chaque classe de zooplancton.
 
-```{r ,echo= FALSE}
-library(ggridges)
-```
 
-```{r g3}
-
-```
-```{r g9}
-
-```
 
 ##Graphique de la transparence en fonction de la compacité.
 ```{r g4}
 chart(zooplankton, transparency~compactness |class) +
   geom_point(na.rm = TRUE)
 ```
-```{r}
-library(ggplot2)
-```
-```{r}
 
-```
+La compacité en fonction de la transparence est très variable même au sein de la même classe : elle peut être soit très dispersé comme pour les annelides ou les malacotracea, soit très dense comme les calanoides ou les décapodes.
+
+
 
 ##Graphique de la taille pour chaque classe.
 ```{r g7}
