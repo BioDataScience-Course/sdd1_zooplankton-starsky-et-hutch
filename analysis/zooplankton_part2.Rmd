@@ -31,10 +31,14 @@ Diverses caractéristiques ont été mesurées par analyse d’image avec le pac
 Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tuléar dont les ordres sont Poécilostomatoïde, Calanoïdes, Harpacticoïde et Cyclopoïde, sur leurs paramètres, comme par exmeple leur taille, leur transparence,.. 
 
 #Statistiques
-Dans ce rapport je vais utiliser 2 tests d'analyse de variance, ce sont les test de Wilcoxon et de Kruskal-Wallis 
+Dans ce rapport je vais utiliser le test de l'ANOVA et le test post-hoc de Tukey. 
+
+ANOVA : ce test consiste émettre l'hypothèse que les moyennes d'un nombre k de populations (4 dans ce cas ci) sont égales. Lorsqu'on rejète cette hypothèse car la valeur de P est inférieure au seuil alpha, cela signifie qu'au moins deux moyennes diffèrent l'une de l'autre mais nous ne savons pas lesquelles. 
+
+Test post-hoc de Tukey : lorsque que l'on rejète H0 après une ANOVA, on effectue un test post-hoc de Tukey pour savoir quelles moyennes diffèrent l'une de l'autre. C'est un test de comparaison deux à deux mais avec un risque de se tromper moindre que dans un test classique de comparaison pour 2 populations comme le test de t Student par exemple. 
 
 #Résultats
-##Graphique du nombre d'individus en fonction des ordres de copépodes
+##Graphique en camembert du nombre d'individus en fonction des ordres de copépodes
 ```{r}
 chart(data = zooplankton_sub, ~ factor(0) %fill=% class) +
   geom_bar(width = 1) + 
@@ -45,7 +49,7 @@ chart(data = zooplankton_sub, ~ factor(0) %fill=% class) +
 
 On peut voir qu'il y a beaucoup plus de CalanoÏdes étudiés que de Poécilostomatoïdes, Harpaticoïdes et Cyclopoïdes.
 
-##Graphique de la surface de l'individu en fonction de l'ordre de copépodes
+##Graphique en colonne de la surface de l'individu en fonction de l'ordre de copépodes
 ```{r}
 chart(zooplankton_sub, formula = area ~ class) +
   geom_col() 
@@ -57,7 +61,7 @@ L'ordre de Poécilostomatoïdes à une surface trois fois inférieure à la clas
 
 Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
 
-##Graphique du périmètre selon les classes de copépodes
+##Graphique en colonne du périmètre selon l'ordre de copépodes
 ```{r }
 chart(zooplankton_sub, perimeter ~ class) +
   geom_col()
@@ -67,8 +71,8 @@ En toute logique, on observe pratiquement la même chose que pour le graphique c
 
 Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
 
-## Graphique de la taille de l'axe mineur de l'ellipsoïde en fonction de la classe de copépodes
-```{r A FAIRE}
+##Boxplot de la taille de l'axe mineur de l'ellipsoïde en fonction de l'ordre de copépodes
+```{r}
 chart(zooplankton_sub, formula = minor ~ class) + 
   geom_boxplot() +
   stat_summary(geom= "point", fun.y= "mean", color= "pink", size= 2) 
@@ -78,7 +82,7 @@ Dans l'ordre des Calanoïdes et des Poécilostomatoïdes, il y a beaucoup d'invi
 
 Par contre, pour les Cyclopoïdes et les Harpaticoïdes, il n'y a pas de valeurs extrêmes donc la moyenne est très proche de la valeur de la médiane. 
 
-## Graphique de la taille de l'axe majeur de l'ellipsoïde en fonction de la classe de copépodes
+##Boxplot de la taille de l'axe majeur de l'ellipsoïde en fonction de l'ordre de copépodes
 ```{r }
 chart(zooplankton_sub, formula = major ~ class) + 
   geom_boxplot() +
@@ -90,7 +94,7 @@ Dans l'ordre des Calanoïdes il y a beaucoup d'invidus présentant une valeur ex
 
 Par contre, pour les Cyclopoïdes et les Harpaticoïdes, il n'y a qu'une  seule valeur extrême, donc la moyenne est très proche de la valeur de la médiane. 
 
-##Histogramme de l'élongation en fonction de la classe de copépode
+##Graphique de densité de l'élongation en fonction de l'ordre de copépodes
 ```{r}
 chart(zooplankton_sub, ~ elongation %col=% class) + 
   geom_density(bins=30) 
@@ -102,7 +106,7 @@ Les cyclopoïdes eux ont une élongation entre 12,5 et 45, les Harpaticoïdes en
 
 Les Poécilostomatoïdes eux ont quasiment tous une élongation entre 4 et 18. 
 
-##Graphique de densité de la densité optique en fonction de la classe de copépodes
+##Graphique en colonne de densité de la densité optique en fonction de l'ordre de copépodes
 ```{r}
 chart(zooplankton_sub,formula= density ~ class  )+ 
   geom_col()
@@ -111,39 +115,63 @@ chart(zooplankton_sub,formula= density ~ class  )+
 Les Calanoïdes ont une densité optique supérieure à 30, ce qui peut s'expliquer par leur grande taille. Les Poécilostomatoïdes ont une densité optique presque égale à 15, ils ont une taille moyenne. 
 Les Cyclopoïdes et les Harpaticoïdes ont une des densités optiques similaires et inférieures à 5. 
 
-
-##Graphique de densité de la circularité selon la classe de copépodes
+##Graphique en colonne de la circularité selon l'ordre de copépodes
 ```{r}
-chart(zooplankton_sub, formula = area ~ circularity | class) + 
-  geom_boxplot()
+chart(zooplankton_sub, formula =  circularity ~ class ) + 
+  geom_col()
 ```
 
+On peut voir que les Calanoïdes et Poécilostomatoïdes ont presque la même circularité et que les cyclopïdes et les Harpaticoïdes ont presque la même circularité entre eux aussi. 
 
-##Graphique de densité de la transparence selon la classe de copépodes
+##Statiistiques
+###ANOVA de la surface des individus en fonction de l'ordre de copépodes
+```{r }
+anova(anova. <- lm(data = zooplankton_sub, area ~ class))
+```
+
+H0 : tous les ordres sont significativement identiques pour la surface (homoscédasticité)
+
+Ici, nous devons rejeter H0 car la valeur de P est grandement inférieure au seuil alpha qui est de 5% (ANOVA, F = 20, ddl = 3 & 531 valeur P << 10-3).
+
+###Test post-hoc de Tukey pour la surface des individus en fonction de l'ordre de copépodes
 ```{r}
-chart(zooplankton_sub, formula = ~ transparency %fill=% class %col=% class %alpha=% class|class) + 
-  geom_density(show.legend = FALSE)
+summary(anovaComp. <- confint(multcomp::glht(anova.,
+  linfct = multcomp::mcp(class = "Tukey"))))
 ```
-
-
-##Histogramme de la moyenne des niveaux de gris sur la densité optique selon la classe de copépodes  
 ```{r}
-chart(zooplankton_sub, formula = max ~ ecd %col=% class %alpha=% class) + 
-  geom_violin() + 
-  coord_flip()
+.oma <- par(oma = c(0, 9, 2, 0)); plot(anovaComp.); par(.oma); rm(.oma)
+```
+
+Suite au rejet de H0 dans le test de l'ANOVA, un test poc-hoc s'annonce. En effet, si l'on sait qu'au moins deux moyennes diffèrent, nous ne savons toujours pas lesquelles. 
+
+Le test post-hoc de tukey montre ici sur le graphique que les Cyclopoïdes et Calanoïdes diffèrent significativement entre eux, ainsi que les Calanoïdes et les Poécilostomatoïdes entre eux, concernant la surface. Toutes les autres comparaisons deux à deux ne sont pas significativement différentes. 
+
+Pour résumer, les seuls ordres à différer significativement entre eux sont les  Cyclopoïdes et Calanoïdes ainsi que les Calanoïdes et les Poécilostomatoïdes. 
+
+###ANOVA de la densité optique des individus en fonction de l'ordre de copépodes
+```{r }
+anova(anova. <- lm(data = zooplankton_sub, density ~ class))
 ```
 
 
+H0 : tous les ordres sont significativement identiques pour la surface (homoscédasticité)
 
+Ici, nous devons rejeter H0 car la valeur de P est grandement inférieure au seuil alpha qui est de 5% (ANOVA, F = 20, ddl = 3 & 531 valeur P << 10-3).
 
-
-```{r Test Wilcoxon}
-
+###Test post-hoc de Tukey pour la surface des individus en fonction de l'ordre de copépodes
+```{r}
+summary(anovaComp. <- confint(multcomp::glht(anova.,
+  linfct = multcomp::mcp(class = "Tukey"))))
+```
+```{r}
+.oma <- par(oma = c(0, 9, 2, 0)); plot(anovaComp.); par(.oma); rm(.oma)
 ```
 
+Le test post-hoc de tukey montre ici sur le graphique que les Cyclopoïdes et Calanoïdes diffèrent significativement entre eux, ainsi que les Calanoïdes et les Poécilostomatoïdes entre eux, mais aussi les Calanoïdes et les Harpacticoïdes, concernant la densité optique. Toutes les autres comparaisons deux à deux ne sont pas significativement différentes. 
 
+Pour résumer, les seuls ordres à différer significativement entre eux sont les  Cyclopoïdes et Calanoïdes, les Calanoïdes et les Harpaticoïdes, ainsi que les Calanoïdes et les Poécilostomatoïdes. 
 
-```{r Kruskal-Wallis}
+#Conclusion
+Les graphiques montrent presque tous de "grosses" différences entre les Calanoïdes et les autres ordres de Copépodes. Les test d'ANOVA et de Tukey confirme ce que disent les graphiques en montrant que les Calanoïdes diffèrent significativement des Cyclopoïdes et des Poécilostomatoïdes pour l'aire et significativement différents des Harpaticoïdes, Cyclopoïdes et des Poécilostomatoïdes. 
 
-```
-
+Je conclue que l'ordre de copépodes influe sur les paramètres corporels des individus. 
