@@ -92,9 +92,7 @@ chart(zooplankton, transparency~compactness |class) +
 library(ggplot2)
 ```
 ```{r}
-ggplot(zooplankton, aes(compactness=x, transparency=y)) +
-  geom_segment( aes(x=x, xend=x, y=0, yend=y), size=1, color="blue", linetype="dotted") +
-  geom_point()
+
 ```
 
 ##Graphique de la taille pour chaque classe.
@@ -106,7 +104,7 @@ chart(zooplankton, formula = size ~ class) +
 
 ##Graphique de l'aire en fonction de l'axe majeur de l'éllipsoïde.
 ```{r g8}
-chart(zooplankton, area~major %color=% class) +
+chart(zooplankton, area~major | class) +
   geom_point(na.rm = TRUE)
 ```
 
@@ -125,7 +123,7 @@ chart(zooplankton, min~max |class) +
 
 ##Graphique de la densité en fonction des D.O. minimale
 ```{r g12}
-chart(zooplankton, ~min) +
+chart(zooplankton, ~min |class) +
   geom_density(na.rm = TRUE)
 ```
  
@@ -142,16 +140,16 @@ chart(zooplankton, circularity~perimeter |class) +
   geom_point()
 ```
 ```{r}
-chart(zooplankton,circularity~perimeter) +
-  geom_bar(position = "dodge") +
-  coord_flip()
+chart(zooplankton,circularity~perimeter |class) +
+  geom_point(position = "dodge")
 ```
 
 ##Histograme des aspects.
 ```{r g15}
 chart(zooplankton,~aspect |class) +
   geom_histogram(data = zooplankton[,-c(20)], fill = "light blue") +
-  geom_histogram(show.legend = FALSE)
+  geom_histogram(show.legend = FALSE)+
+  coord_flip()
 ```
 ```{r}
 chart(zoo_peri, aes(x=mean, y=class))+
@@ -162,8 +160,3 @@ chart(zoo_peri, aes(x=mean, y=class))+
                    yend=class))
 ``` 
 
-```{r nouveau jeu de données}
-zooplankton %>.%
-  group_by(., class) %>.%
-  summarise(.,mean= mean(perimeter)) -> zoo_peri
-```
