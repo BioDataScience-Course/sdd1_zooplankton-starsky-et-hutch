@@ -14,7 +14,7 @@ SciViews::R
 Nous avons récolté des échantillons de zooplanctons en différents point géographiques, en différentes saisons, en différentes profondeurs pour pouvoir représenter la variabilité. Attention les classes rares sont ici surreprésentées.
 
 #But
-Le but de cette expérience est de paramétrer un classeur automatique pour le zooplancton. Pour cela, on 
+Le but de cette expérience est de paramétrer un classeur automatique pour le zooplancton. Pour cela, on va rechercher des caractéristiques des familles de zooplamctons.
 
 
 
@@ -48,15 +48,16 @@ zooplankton %>.%
 ```
 ##Graphique de l'aire en fonction du diamètre circulaire équivalent.
 ```{r g1}
-chart(zoo, area~ecd %col=% class) +
-  geom_point(na.rm = TRUE) +
-  scale_fill_viridis_d()
+chart(zooplankton, area~size | class) +
+  geom_point(alpha = 0.5) +
+  scale_fill_viridis_d()+
+  coord_flip()
 ```
 
 ##Histogramme de la taille. 
 ```{r g2}
-chart(zoo, formula = ~ size %fill=% class) +
-  geom_histogram(bins= 30) +
+chart(zooplankton, formula = ~ size %fill=% class) +
+  geom_histogram(bins = ) +
   geom_histogram(show.legend = FALSE)
 ```
 ```{r}
@@ -65,11 +66,8 @@ chart(zoo,size~class) +
   coord_flip()
 ```
 
+
 ```{r g5_6}
-chart(zoo, formula = ~ size %col=% class) +
-  geom_density()
-chart(zoo, ~size %color=% class) +
-  geom_density()
 ```
 
 ##Graphique de l'aire pour chaque classe de zooplancton.
@@ -79,13 +77,10 @@ library(ggridges)
 ```
 
 ```{r g3}
-chart(zoo, class ~ area ) +
-  geom_density_ridges(na.rm = TRUE)
+
 ```
 ```{r g9}
-chart(zooplankton, area~class) +
-  geom_violin(na.rm = TRUE) +
-  coord_flip()
+
 ```
 
 ##Graphique de la transparence en fonction de la compacité.
