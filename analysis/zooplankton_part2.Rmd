@@ -28,7 +28,7 @@ Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et M
 Diverses caractéristiques ont été mesurées par analyse d’image avec le package zooimage et ImageJ sur des échantillons de zooplancton provenant de Tuléar, à Madagascar. 
 
 #But 
-Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tuléar dont les ordres sont Poécilostomatoïde, Calanoïdes, Harpacticoïde et Cyclopoïde, sur leurs paramètres, comme par exmeple leur taille, leur transparence,.. 
+Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tuléar dont les ordres sont Poécilostomatoïde, Calanoïdes, Harpacticoïde et Cyclopoïde, sur leurs paramètres corporels, comme par exemple leur taille, leur transparence,.. 
 
 #Statistiques
 Dans ce rapport je vais utiliser le test de l'ANOVA et le test post-hoc de Tukey. 
@@ -57,7 +57,7 @@ chart(zooplankton_sub, formula = area ~ class) +
 
 On peut observer ici que l'ordre des Calanoïdes a une surface grandement supérieure aux troix autres ordres. 
 
-L'ordre de Poécilostomatoïdes à une surface trois fois inférieure à la classe des calanoïdes, mais il a aussi une surface trois fois supérieure aux ordres des Cyclopoïdes et des Harpacticoïdes qui eux ont approximativement la même surface. 
+L'ordre de Poécilostomatoïdes à une surface trois fois inférieure à la classe des Calanoïdes, mais il a aussi une surface trois fois supérieure aux ordres des Cyclopoïdes et des Harpacticoïdes qui eux ont approximativement la même surface. 
 
 Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
 
@@ -67,7 +67,7 @@ chart(zooplankton_sub, perimeter ~ class) +
   geom_col()
 ```
 
-En toute logique, on observe pratiquement la même chose que pour le graphique comparant les surfaces en fonction des ordres. Les calanoïdes ont le plus grand périmètre, suivis par les Poécilostomatoïdes qui ont un périmètre environ 3.6 fois inférieur. Les Cyclopoïdes et Harpaticoïdes ont pratiquement le même périmètre. 
+En toute logique, on observe pratiquement la même chose que pour le graphique comparant les surfaces en fonction des ordres. Les Calanoïdes ont le plus grand périmètre, suivis par les Poécilostomatoïdes qui ont un périmètre environ 3.6 fois inférieur. Les Cyclopoïdes et Harpaticoïdes ont pratiquement le même périmètre. 
 
 Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
 
@@ -102,7 +102,7 @@ chart(zooplankton_sub, ~ elongation %col=% class) +
 
 On peut voir que les Calanoïdes ont une élongation entre 6 et 50 en majorité avec quelques exceptions au delà de 50. 
 
-Les cyclopoïdes eux ont une élongation entre 12,5 et 45, les Harpaticoïdes entre 25 et 60. 
+Les Cyclopoïdes eux ont une élongation entre 12,5 et 45, les Harpaticoïdes entre 25 et 60. 
 
 Les Poécilostomatoïdes eux ont quasiment tous une élongation entre 4 et 18. 
 
@@ -121,7 +121,7 @@ chart(zooplankton_sub, formula =  circularity ~ class ) +
   geom_col()
 ```
 
-On peut voir que les Calanoïdes et Poécilostomatoïdes ont presque la même circularité et que les cyclopïdes et les Harpaticoïdes ont presque la même circularité entre eux aussi. 
+On peut voir que les Calanoïdes et Poécilostomatoïdes ont presque la même circularité et que les Cyclopïdes et les Harpaticoïdes ont presque la même circularité entre eux aussi. 
 
 ##Statiistiques
 ###ANOVA de la surface des individus en fonction de l'ordre de copépodes
@@ -154,11 +154,11 @@ anova(anova. <- lm(data = zooplankton_sub, density ~ class))
 ```
 
 
-H0 : tous les ordres sont significativement identiques pour la surface (homoscédasticité)
+H0 : tous les ordres sont significativement identiques pour la densité optique (homoscédasticité)
 
 Ici, nous devons rejeter H0 car la valeur de P est grandement inférieure au seuil alpha qui est de 5% (ANOVA, F = 20, ddl = 3 & 531 valeur P << 10-3).
 
-###Test post-hoc de Tukey pour la surface des individus en fonction de l'ordre de copépodes
+###Test post-hoc de Tukey pour la densité optique des individus en fonction de l'ordre de copépodes
 ```{r}
 summary(anovaComp. <- confint(multcomp::glht(anova.,
   linfct = multcomp::mcp(class = "Tukey"))))
