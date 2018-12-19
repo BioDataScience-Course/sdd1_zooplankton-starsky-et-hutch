@@ -1,9 +1,9 @@
 ---
-title: "zooplancton part2"
+title: "Zooplancton classes réduites"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r Setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -16,97 +16,124 @@ zooplankton <- read( file = "zooplankton", package = "data.io", lang = "fr")
 zooplankton_sub <- filter(zooplankton, class %in% c("Poecilostomatoid", "Calanoid", "Cyclopoid", "Harpacticoid"))
 ```
 
-#Introduction
-Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascar, et plus précisément sur les copépodes.
-
-#But 
-Déterminer les relations entre les différentes parties corporelles chez les zooplanctons de Tulear et Madagascar. 
-
-#Matériel et méthodes
-Je ne dispose pas des informations concernant l'acquisation des données utilisées dans ce rapport (comment elles ont été collectées, à quel moment, à l'aide de quels instruments)
-
-#Statistiques
-Dans ce rapport je vais utiliser 2 tests d'analyse de variance, ce sont les test de Wilcoxon et de Kruskal-Wallis 
-#Résultats
-##Graphique de l'ecd en fonction de l'aire
-```{r Graphique 1}
-chart(zooplankton_sub, formula = ecd ~ area %col=% perimeter) +
-  geom_point(na.rm = TRUE) 
-```
-
-
 ```{r}
 library(ggridges)
 ```
 
 
+#Introduction
+Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascar, et plus précisément sur les copépodes. Je vais présenter plusieurs graphiques et test dans ce rapport d'analyses. 
+
+#Matériel et méthodes
+Diverses caractéristiques ont été mesurées par analyse d’image avec le package zooimage et ImageJ sur des échantillons de zooplancton provenant de Tuléar, à Madagascar. 
+
+#But 
+Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tuléar dont les ordres sont Poécilostomatoïde, Calanoïdes, Harpacticoïde et Cyclopoïde, sur leurs paramètres, comme par exmeple leur taille, leur transparence,.. 
+
+#Statistiques
+Dans ce rapport je vais utiliser 2 tests d'analyse de variance, ce sont les test de Wilcoxon et de Kruskal-Wallis 
+
+#Résultats
+##Graphique du nombre d'individus en fonction des ordres de copépodes
+```{r}
+chart(data = zooplankton_sub, ~ factor(0) %fill=% class) +
+  geom_bar(width = 1) + 
+  coord_polar("y", start = 0) +
+  theme_void() +
+  scale_fill_grey()
+```
+
+On peut voir qu'il y a beaucoup plus de CalanoÏdes étudiés que de Poécilostomatoïdes, Harpaticoïdes et Cyclopoïdes.
+
+##Graphique de la surface de l'individu en fonction de l'ordre de copépodes
+```{r}
+chart(zooplankton_sub, formula = area ~ class) +
+  geom_col() 
+```
+
+On peut observer ici que l'ordre des Calanoïdes a une surface grandement supérieure aux troix autres ordres. 
+
+L'ordre de Poécilostomatoïdes à une surface trois fois inférieure à la classe des calanoïdes, mais il a aussi une surface trois fois supérieure aux ordres des Cyclopoïdes et des Harpacticoïdes qui eux ont approximativement la même surface. 
+
+Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
+
 ##Graphique du périmètre selon les classes de copépodes
-```{r Graphique 2}
-chart(zooplankton_sub, class ~ perimeter %fill=% class %alpha=% class) +
-  geom_density_ridges() 
+```{r }
+chart(zooplankton_sub, perimeter ~ class) +
+  geom_col()
 ```
 
+En toute logique, on observe pratiquement la même chose que pour le graphique comparant les surfaces en fonction des ordres. Les calanoïdes ont le plus grand périmètre, suivis par les Poécilostomatoïdes qui ont un périmètre environ 3.6 fois inférieur. Les Cyclopoïdes et Harpaticoïdes ont pratiquement le même périmètre. 
 
-## Graphique de l'axe mineur de l'ellipsoïde en fonction de la classe de copépode
-```{r Graphique 3}
-chart(zooplankton_sub, formula = min ~ class %fill=% class) + 
-  geom_violin() +
-  coord_flip()
+Cela est surement dû au fait que le nombre d'individus étudiés dans chaque ordre est grandement différent. 
+
+## Graphique de la taille de l'axe mineur de l'ellipsoïde en fonction de la classe de copépodes
+```{r A FAIRE}
+chart(zooplankton_sub, formula = minor ~ class) + 
+  geom_boxplot() +
+  stat_summary(geom= "point", fun.y= "mean", color= "pink", size= 2) 
 ```
 
+Dans l'ordre des Calanoïdes et des Poécilostomatoïdes, il y a beaucoup d'invidus présentant une valeur extrême pour l'axe mineur de l'élipsoïde, ce qui explique pourquoi le point de la moyenne des indidus ne se situe pas sur la médiane, les valeurs extrêmes faussent la moyenne. 
+
+Par contre, pour les Cyclopoïdes et les Harpaticoïdes, il n'y a pas de valeurs extrêmes donc la moyenne est très proche de la valeur de la médiane. 
+
+## Graphique de la taille de l'axe majeur de l'ellipsoïde en fonction de la classe de copépodes
+```{r }
+chart(zooplankton_sub, formula = major ~ class) + 
+  geom_boxplot() +
+  stat_summary(geom= "point", fun.y= "mean", color= "pink", size= 2) +
+  coord_flip() 
+```
+
+Dans l'ordre des Calanoïdes il y a beaucoup d'invidus présentant une valeur extrême pour l'axe mineur de l'élipsoïde et dpour les Poécilostomatoïdes, il n'y a que 2 individus qui présentent des valeurs extrêmes, mais celles-ci sont vraiment grandes,  ce qui explique pourquoi le point de la moyenne des indidus ne se situe pas sur la médiane et en est très éloigné, les valeurs extrêmes faussent la moyenne. 
+
+Par contre, pour les Cyclopoïdes et les Harpaticoïdes, il n'y a qu'une  seule valeur extrême, donc la moyenne est très proche de la valeur de la médiane. 
 
 ##Histogramme de l'élongation en fonction de la classe de copépode
-```{r Graphique 4}
-chart(zooplankton_sub, ~ elongation %alpha=% class) + 
-  geom_histogram(bins=30) 
+```{r}
+chart(zooplankton_sub, ~ elongation %col=% class) + 
+  geom_density(bins=30) 
 ```
 
+On peut voir que les Calanoïdes ont une élongation entre 6 et 50 en majorité avec quelques exceptions au delà de 50. 
 
-##Graphique de densité de la compacité en fonction de la classe de copépode
-```{r Graphique 5}
-chart(zooplankton_sub,formula=~ compactness %col=% class)+ 
-  geom_density()
+Les cyclopoïdes eux ont une élongation entre 12,5 et 45, les Harpaticoïdes entre 25 et 60. 
+
+Les Poécilostomatoïdes eux ont quasiment tous une élongation entre 4 et 18. 
+
+##Graphique de densité de la densité optique en fonction de la classe de copépodes
+```{r}
+chart(zooplankton_sub,formula= density ~ class  )+ 
+  geom_col()
 ```
 
-
-##Graphique de la compacité en fonction de la transparence selon la classe de copépode
-```{r Graphique 6}
-chart(zooplankton_sub, formula = ~ class %fill=% class) + 
-  geom_bar(position="dodge") + 
-  coord_flip()
-```
+Les Calanoïdes ont une densité optique supérieure à 30, ce qui peut s'expliquer par leur grande taille. Les Poécilostomatoïdes ont une densité optique presque égale à 15, ils ont une taille moyenne. 
+Les Cyclopoïdes et les Harpaticoïdes ont une des densités optiques similaires et inférieures à 5. 
 
 
-##Graphique de densité de la circularité selon la classe de copépode
-```{r Graphique 7}
+##Graphique de densité de la circularité selon la classe de copépodes
+```{r}
 chart(zooplankton_sub, formula = area ~ circularity | class) + 
   geom_boxplot()
 ```
 
 
-##Graphique de densité de la transparence selon la classe de copépode
-```{r Graphique 8}
+##Graphique de densité de la transparence selon la classe de copépodes
+```{r}
 chart(zooplankton_sub, formula = ~ transparency %fill=% class %col=% class %alpha=% class|class) + 
   geom_density(show.legend = FALSE)
 ```
 
 
-##Histogramme de la moyenne selon la classe de copépodes  
-```{r Graphique 9}
-chart(zooplankton_sub, formula= max ~ ecd %col=% class %alpha=% class) + 
+##Histogramme de la moyenne des niveaux de gris sur la densité optique selon la classe de copépodes  
+```{r}
+chart(zooplankton_sub, formula = max ~ ecd %col=% class %alpha=% class) + 
   geom_violin() + 
   coord_flip()
 ```
 
 
-##Graphique de l'élongation en fonction de la circularité selon la classe de copépode
-```{r Graphique 10}
-chart(zooplankton_sub, formula= ~ 0 %fill=% class %alpha=% class) + 
-  geom_bar(width = 1) + 
-  coord_polar("y", start = 0) +
-  theme_void() + 
-  scale_fill_viridis_d()
-```
 
 
 
