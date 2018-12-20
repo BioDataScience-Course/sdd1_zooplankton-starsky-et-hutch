@@ -1,6 +1,12 @@
 ---
 title: "Zooplancton classes réduites"
-output: html_document
+output: 
+  html_document: 
+    number_sections: yes
+    toc: yes
+  pdf_document: 
+    number_sections: yes
+    toc: yes
 ---
 
 ```{r Setup, include=FALSE}
@@ -22,10 +28,10 @@ library(ggridges)
 
 
 #Introduction
-Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear et Madagascar, et plus précisément sur les copépodes. Je vais présenter plusieurs graphiques et test dans ce rapport d'analyses. 
+Cette recherche porte sur l'étude morphologique des zooplanctons de Tulear à Madagascar, et plus précisément sur les copépodes. Je vais présenter plusieurs graphiques et tests dans ce rapport d'analyses. 
 
 #Matériel et méthodes
-Diverses caractéristiques ont été mesurées par analyse d’image avec le package zooimage et ImageJ sur des échantillons de zooplancton provenant de Tuléar, à Madagascar. 
+Diverses caractéristiques ont été mesurées par analyse d’images avec le package zooimage et ImageJ sur des échantillons de zooplancton provenant de Tuléar, à Madagascar. 
 
 #But 
 Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tuléar dont les ordres sont Poécilostomatoïde, Calanoïdes, Harpacticoïde et Cyclopoïde, sur leurs paramètres corporels, comme par exemple leur taille, leur transparence,.. 
@@ -33,7 +39,7 @@ Déterminer l'influence de la sous-classes des copépodes des zooplanktons de Tu
 #Statistiques
 Dans ce rapport je vais utiliser le test de l'ANOVA et le test post-hoc de Tukey. 
 
-ANOVA : ce test consiste émettre l'hypothèse que les moyennes d'un nombre k de populations (4 dans ce cas ci) sont égales. Lorsqu'on rejète cette hypothèse car la valeur de P est inférieure au seuil alpha, cela signifie qu'au moins deux moyennes diffèrent l'une de l'autre mais nous ne savons pas lesquelles. 
+ANOVA : ce test consiste à émettre l'hypothèse que les moyennes d'un nombre k de populations (4 dans ce cas ci) sont égales. Lorsqu'on rejète cette hypothèse car la valeur de P est inférieure au seuil alpha, cela signifie qu'au moins deux moyennes diffèrent l'une de l'autre mais nous ne savons pas lesquelles. 
 
 Test post-hoc de Tukey : lorsque que l'on rejète H0 après une ANOVA, on effectue un test post-hoc de Tukey pour savoir quelles moyennes diffèrent l'une de l'autre. C'est un test de comparaison deux à deux mais avec un risque de se tromper moindre que dans un test classique de comparaison pour 2 populations comme le test de t Student par exemple. 
 
@@ -90,14 +96,14 @@ chart(zooplankton_sub, formula = major ~ class) +
   coord_flip() 
 ```
 
-Dans l'ordre des Calanoïdes il y a beaucoup d'invidus présentant une valeur extrême pour l'axe mineur de l'élipsoïde et dpour les Poécilostomatoïdes, il n'y a que 2 individus qui présentent des valeurs extrêmes, mais celles-ci sont vraiment grandes,  ce qui explique pourquoi le point de la moyenne des indidus ne se situe pas sur la médiane et en est très éloigné, les valeurs extrêmes faussent la moyenne. 
+Dans l'ordre des Calanoïdes il y a beaucoup d'invidus présentant une valeur extrême pour l'axe majeur de l'élipsoïde et pour les Poécilostomatoïdes, il n'y a que 2 individus qui présentent des valeurs extrêmes, mais celles-ci sont vraiment grandes,  ce qui explique pourquoi le point de la moyenne des indidus ne se situe pas sur la médiane et en est très éloigné, les valeurs extrêmes faussent la moyenne. 
 
 Par contre, pour les Cyclopoïdes et les Harpaticoïdes, il n'y a qu'une  seule valeur extrême, donc la moyenne est très proche de la valeur de la médiane. 
 
 ##Graphique de densité de l'élongation en fonction de l'ordre de copépodes
 ```{r}
 chart(zooplankton_sub, ~ elongation %col=% class) + 
-  geom_density(bins=30) 
+  geom_density() 
 ```
 
 On peut voir que les Calanoïdes ont une élongation entre 6 et 50 en majorité avec quelques exceptions au delà de 50. 
