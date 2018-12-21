@@ -11,16 +11,20 @@ source: Grosjean, Ph & K. Denis (2004). Supervised classification of images, app
 SciViews::R
 ```
 #Introduction
-Nous avons récolté des échantillons de zooplanctons en différents point géographiques, en différentes saisons, en différentes profondeurs pour pouvoir représenter la variabilité. Attention les classes rares sont ici surreprésentées.
+Nous avons récolté des échantillons de zooplanctons à Tuléar à Madacascar en différents point géographiques, en différentes saisons, en différentes profondeurs pour pouvoir représenter la variabilité. Attention les classes rares sont ici surreprésentées.
 
 #But
 Le but de cette expérience est de paramétrer un classeur automatique pour le zooplancton. Pour cela, on va rechercher des caractéristiques des familles de zooplamctons.
 
+#Support informatique
+Nous avons utilisé Rstudio comme support pour le traitement des données et pour la réalisation des graphiques.
 
+#Résultats
 
-#Graphique
 ```{r import}
 zooplankton <- read( file = "zooplankton", package = "data.io", lang = "fr")
+# Library
+library(tidyverse)
 ```
 
 ```{r}
@@ -46,101 +50,88 @@ zooplankton %>.%
             "circularity"=mean(circularity),
             "density"=mean(density)) -> zoo
 ```
+
 ##Graphique de l'aire en fonction du diamètre circulaire équivalent.
 ```{r g1}
 chart(zooplankton, area~size | class) +
   geom_point(alpha = 0.5)
 ```
 
-Nous voyons ici que la taile en fonction de l'aire est très variable en fonction de l'espèce.
+Nous voyons ici que pour la plupart des ordres ici présents, la taille en fonction de l'aire est souvent très petite, sauf pour certaines exception comme les *Chaetognathes*, les *Cnidaires*, les *Annelides* et les *Malacotracés*.
+
 ##Histogramme de la taille. 
 
-
-
-```{r}
+```{r g2}
 chart(zoo,size~class) +
   geom_col(position = "dodge") +
   coord_flip()
 ```
 
-Nous constatons ici que la taille varie énormement en fonction de l'espèce.
-
-
-
+Nous constatons ici que la taille varie énormement en fonction de l'espèce, avec pour classe dont la taille est la plus grande les *Chaetognathes*, et avec la plus petite taille les *Protistes*.
 
 
 ##Graphique de la transparence en fonction de la compacité.
-```{r g4}
+
+```{r g3}
 chart(zooplankton, transparency~compactness |class) +
   geom_point(na.rm = TRUE)
 ```
 
-La compacité en fonction de la transparence est très variable même au sein de la même classe : elle peut être soit très dispersé comme pour les annelides ou les malacotracea, soit très dense comme les calanoides ou les décapodes.
-
-
-
-##Graphique de la taille pour chaque classe.
-```{r g7}
-chart(zooplankton, formula = size ~ class) +
-  geom_violin() +
-  coord_flip()
-```
+La compacité en fonction de la transparence est très variable même au sein de la même classe : elle peut être soit très dispersé comme pour les *Annelides* ou les *Malacotracés*, soit très dense comme les *Calanoides* ou les *Décapodes*.
 
 ##Graphique de l'aire en fonction de l'axe majeur de l'éllipsoïde.
-```{r g8}
+
+```{r g4}
 chart(zooplankton, area~major | class) +
   geom_point(na.rm = TRUE)
 ```
-
+Nous pouvons constater que pour la plupart des classes l'axe majeur de l'éllipsoïde est plutot faible sauf pour certaines classes comme les *Chaetognathes*, les *Cnidaires* et les *Malacotracés*.
 
 ##Graphique de l'étendue des D.O. en fonction de la taille .
-```{r g10}
+
+```{r g5}
 chart(zooplankton, range~size |class) +
   geom_point(na.rm = TRUE)
 ```
+Ici, nous voyons que l'étendues des D.O. est souvent élevé et ce peut importe la taille. Les rares exceptions sont les *Protistes* et les *Cyclopoïdes*. Il n'y a qu'une seule classe qui est très diversifiée, les *Cnidaires*, on constate que eux peuvent avoir une étendue des D.O. très grande ou bien très petite, et aussi une grande ou une petite taille.
 
-##Graphique des D.O. minimales en fonction des D.O. maximums
-```{r g11}
-chart(zooplankton, min~max |class) +
-  geom_point(na.rm =TRUE)
-```
-
-##Graphique de la densité en fonction des D.O. minimale
-```{r g12}
-chart(zooplankton, ~min |class) +
-  geom_density(na.rm = TRUE)
-```
- 
 ##Histograme de l'écartype des D.O.
-```{r g13}
-chart(zooplankton,~std_dev |class) +
-  geom_histogram(data = zooplankton[ , -c(20)], fill = "light blue") +
-  geom_histogram(show.legend = FALSE)
+```{r g6}
+chart(zoo,std_dev ~class) +
+  geom_col(data = zoo[ , -c(20)], fill = "light blue")+
+  coord_flip()
 ```
+Nous voyons que l'écartype des D.O. est très variable en fonction de la classe, il peut être très élevé comme pour les *Gastéropodes* ou à l'inverse très faible comme pour les *Protistes*.
 
 ##Graphique de la circularité en fonction du périmètre.
-```{r g14}
-chart(zooplankton, circularity~perimeter |class) +
-  geom_point()
+
+```{r g7}
+chart(zoo, circularity~perimeter %col=% class |class) +
+  geom_col()
 ```
+Nous voyons que certaines classes ont un périmètre très élevé pour une circularité plutot faible. D'autres ont à l'inverse une grande circularité pour un périmètre très faible.
+
 ```{r}
 chart(zooplankton,circularity~perimeter |class) +
   geom_point(position = "dodge")
 ```
 
 ##Histograme des aspects.
-```{r g15}
-chart(zooplankton,~aspect |class) +
-  geom_histogram(data = zooplankton[,-c(20)], fill = "light blue") +
-  geom_histogram(show.legend = FALSE)+
+```{r g8}
+chart(zooplankton,~aspect %fill=% class) +
+  geom_histogram() +
   coord_flip()
 ```
-```{r}
-chart(zoo_peri, aes(x=mean, y=class))+
+Nous constatons que le ratio d'aspect est complètement variable pour chaque classe.
+
+##Graphique du D.O. moyen en fonction de la classe
+
+```{r g9}
+chart(zoo, aes(x=mean, y=class))+
   geom_point() +
   geom_segment(aes(x=0,
                    xend=mean,
                    y=class,
                    yend=class))
 ``` 
-
+La taille moyenne des D.O. est très variable. Ca peut aller de plus de 0.03 (*Protiste*) à 0.055 (*Gastéropodes*).
