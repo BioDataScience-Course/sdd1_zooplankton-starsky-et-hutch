@@ -135,3 +135,7 @@ chart(zoo, aes(x=mean, y=class))+
                    yend=class))
 ``` 
 La taille moyenne des D.O. est très variable. Ca peut aller de plus de 0.03 (*Protiste*) à 0.055 (*Gastéropodes*).
+
+#Conclusion
+
+Il serait difficile de faire une machine qui classerais le zooplancton et surtout qu'elle soit 100% fiable. Bien que les caractéristiques des classes se distinguent toutes mais ils arrivent souvent qu'elles se chevauchent.
